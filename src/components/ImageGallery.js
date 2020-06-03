@@ -1,22 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import ImageElement from "./ImageElement";
 
-const ImageGallery = ({ imageList, imageAmount }) => {
-  //const [imageListOrder, setImageListOrder] = useState([]);
+const ImageGallery = ({ imageList, imageAmount = null }) => {
   const [positionImage, setPositionImage] = useState(0);
+  const [hideElement, setHideElement] = useState(false);
 
-  /* useEffect(() => {
-    setImageListOrder([...imageList]);
-  }, [imageList]);*/
+  const movePicture = (isLeft = false, direction) => {
+    const lengthList = imageList.length - 1;
+    let currentPos = direction();
+    const movement = isLeft ? currentPos < 0 : currentPos > lengthList;
 
-  //console.log("-----", imageListOrder);
+    if (movement) {
+      currentPos = isLeft ? lengthList : 0;
+      setPositionImage(currentPos);
+    } else {
+      setPositionImage(currentPos);
+    }
+  };
+
+  const moveLeft = () => {
+    setHideElement(true);
+    setTimeout(() => setHideElement(false), 100);
+    return positionImage - 1;
+  };
+  const moveRight = () => {
+    setHideElement(true);
+    setTimeout(() => setHideElement(false), 100);
+    return positionImage + 1;
+  };
+
+  const getCurrentImagePosition = () => positionImage + 1;
+  const getLimitGallery = () => imageAmount || imageList.length;
 
   return (
     <div>
       <h3>Images quantity: {imageAmount}</h3>
-      <h4>We are watching {`${0} / ${5}`}</h4>
+      <h4>
+        We are watching {`${getCurrentImagePosition()} / ${getLimitGallery()}`}
+      </h4>
 
-      <button onClick={() => setPositionImage(2)}>left</button>
-      <button onClick={() => setPositionImage(1)}>right</button>
+      <button onClick={() => movePicture(true, moveLeft)}>left</button>
+      <button onClick={() => movePicture(undefined, moveRight)}>right</button>
       <div
         style={{
           width: "132px",
@@ -26,15 +50,7 @@ const ImageGallery = ({ imageList, imageAmount }) => {
         }}
       >
         {imageList[positionImage] !== undefined && (
-          <img
-            src={imageList[positionImage].url}
-            alt=""
-            width="132"
-            height="400"
-            style={{
-              flexShrink: 0,
-            }}
-          />
+          <ImageElement url={imageList[positionImage].url} hide={hideElement} />
         )}
       </div>
     </div>
