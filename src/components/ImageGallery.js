@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import ImageElement from "./ImageElement";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ImageGallery = ({ imageList, imageAmount = null }) => {
   const [positionImage, setPositionImage] = useState(0);
@@ -39,19 +44,34 @@ const ImageGallery = ({ imageList, imageAmount = null }) => {
         We are watching {`${getCurrentImagePosition()} / ${getLimitGallery()}`}
       </h4>
 
-      <button onClick={() => movePicture(true, moveLeft)}>left</button>
-      <button onClick={() => movePicture(undefined, moveRight)}>right</button>
-      <div
-        style={{
-          width: "132px",
-          overflowX: "auto",
-          display: "flex",
-          margin: "0 auto",
-        }}
-      >
-        {imageList[positionImage] !== undefined && (
-          <ImageElement url={imageList[positionImage].url} hide={hideElement} />
-        )}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <FontAwesomeIcon
+          icon={faChevronLeft}
+          onClick={() => movePicture(true, moveLeft)}
+          style={{ cursor: "pointer" }}
+          size="lg"
+        />
+        <div
+          style={{
+            width: "132px",
+            overflowX: "auto",
+            display: "flex",
+            margin: "0 auto",
+          }}
+        >
+          {imageList[positionImage] !== undefined && (
+            <ImageElement
+              url={imageList[positionImage].url}
+              hide={hideElement}
+            />
+          )}
+        </div>
+        <FontAwesomeIcon
+          icon={faChevronRight}
+          onClick={() => movePicture(undefined, moveRight)}
+          style={{ cursor: "pointer" }}
+          size="lg"
+        />
       </div>
     </div>
   );
